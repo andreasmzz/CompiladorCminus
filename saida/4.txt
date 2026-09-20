@@ -1,0 +1,7 @@
+i = 3;
+
+--- Tokens ---
+<39, i, linha: 1>
+<26, =, linha: 1>
+<36, 3, linha: 1>
+<28, ;, linha: 1>

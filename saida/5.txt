@@ -1,0 +1,9 @@
+int x[10]@
+
+--- Tokens ---
+<6, int, linha: 1>
+<39, x, linha: 1>
+<31, [, linha: 1>
+<36, 10, linha: 1>
+<32, ], linha: 1>
+<40, Caractere inválido: @, linha: 1>

@@ -1,0 +1,22 @@
+int a = 3;
+if(a > 2{
+	a = 2;
+}
+
+--- Tokens ---
+<6, int, linha: 1>
+<39, a, linha: 1>
+<26, =, linha: 1>
+<36, 3, linha: 1>
+<28, ;, linha: 1>
+<5, if, linha: 2>
+<33, (, linha: 2>
+<39, a, linha: 2>
+<16, >, linha: 2>
+<36, 2, linha: 2>
+<29, {, linha: 2>
+<39, a, linha: 3>
+<26, =, linha: 3>
+<36, 2, linha: 3>
+<28, ;, linha: 3>
+<30, }, linha: 4>

@@ -1,0 +1,79 @@
+import java_cup.runtime.*;
+
+parser code {:
+    // conectar esse parser ao scanner!
+    Scanner s;
+    Parser(Scanner s){ this.s=s; }
+
+    // tabela de símbolos
+    java.util.Map<String, Integer> simbolos = new java.util.HashMap<String, Integer>();
+:}
+
+/* conectar esse parser ao scanner! */
+init with {:  :};
+scan with {: return s.next_token(); :};
+
+terminal ELSE, EXIT, FLOAT, IF, INT, READ, RETURN, WHILE, WRITE;
+terminal AND, OR, NOT;
+terminal EQ, NE, GT, GE, LT, LE;
+terminal PLUS, MINUS, MUL, DIV, IDIV, POW;
+terminal ASSIGN;
+terminal CM, SC, LBR, RBR, LBK, RBK, LPAREN, RPAREN, SQ;
+terminal INTCON, FLOATCON, STRING;
+terminal IDENTIFIER;
+terminal ERROR;
+
+non terminal Program, DeclList, Decl, StatementList, Statement, Expr;
+
+precedence left OR, AND;
+precedence left EQ, NE, LT, LE, GT, GE;
+precedence left PLUS, MINUS;
+precedence left MUL, DIV, IDIV;
+precedence left POW;
+precedence right NOT;
+
+start with Program;
+
+/* ================== REGRAS SIMPLIFICADAS ================== */
+
+Program ::= DeclList ;
+
+DeclList ::= DeclList Decl
+           | Decl
+           ;
+
+Decl ::= INT IDENTIFIER SC
+       | FLOAT IDENTIFIER SC
+       ;
+
+StatementList ::= StatementList Statement
+                | Statement
+                ;
+
+Statement ::= IDENTIFIER ASSIGN Expr SC
+            | READ LPAREN IDENTIFIER RPAREN SC
+            | WRITE LPAREN Expr RPAREN SC
+            | IF LPAREN Expr RPAREN Statement
+            | WHILE LPAREN Expr RPAREN Statement
+            | LBR StatementList RBR
+            ;
+
+stmt ::= error:err 
+        {: 
+            System.err.println("Erro sintático próximo ao token: " + err.value); 
+        :}
+      | ERROR:err
+        {: 
+            System.err.println("Erro léxico: " + err.value); 
+        :}
+      ;
+
+Expr ::= Expr PLUS Expr
+       | Expr MINUS Expr
+       | Expr MUL Expr
+       | Expr DIV Expr
+       | IDENTIFIER
+       | INTCON
+       | FLOATCON
+       | LPAREN Expr RPAREN
+       ;

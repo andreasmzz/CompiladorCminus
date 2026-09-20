@@ -1,0 +1,9 @@
+int main() {
+    int n;
+    float f;
+    read(n);
+    read(f);
+    write(n);
+    write(f);
+    return 0;
+}
