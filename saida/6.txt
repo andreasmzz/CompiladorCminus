@@ -5,18 +5,18 @@ if(a > 2{
 
 --- Tokens ---
 <6, int, linha: 1>
-<39, a, linha: 1>
-<26, =, linha: 1>
-<36, 3, linha: 1>
-<28, ;, linha: 1>
+<37, a, linha: 1>
+<24, =, linha: 1>
+<34, 3, linha: 1>
+<26, ;, linha: 1>
 <5, if, linha: 2>
-<33, (, linha: 2>
-<39, a, linha: 2>
+<31, (, linha: 2>
+<37, a, linha: 2>
 <16, >, linha: 2>
-<36, 2, linha: 2>
-<29, {, linha: 2>
-<39, a, linha: 3>
-<26, =, linha: 3>
-<36, 2, linha: 3>
-<28, ;, linha: 3>
-<30, }, linha: 4>
+<34, 2, linha: 2>
+<27, {, linha: 2>
+<37, a, linha: 3>
+<24, =, linha: 3>
+<34, 2, linha: 3>
+<26, ;, linha: 3>
+<28, }, linha: 4>

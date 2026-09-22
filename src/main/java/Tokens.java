@@ -6,47 +6,45 @@
 /** CUP generated class containing symbol constants. */
 public class Tokens {
   /* terminals */
-  public static final int POW = 25;
-  public static final int SQ = 35;
+  public static final int DIVIDE = 23;
+  public static final int SQ = 33;
   public static final int GE = 17;
-  public static final int RBR = 30;
-  public static final int RBK = 32;
-  public static final int LPAREN = 33;
-  public static final int SC = 28;
+  public static final int RBR = 28;
+  public static final int RBK = 30;
+  public static final int SC = 26;
   public static final int INT = 6;
   public static final int MINUS = 21;
   public static final int WRITE = 10;
-  public static final int RPAREN = 34;
   public static final int NOT = 13;
   public static final int AND = 11;
   public static final int LT = 18;
-  public static final int CM = 27;
+  public static final int CM = 25;
+  public static final int LP = 31;
   public static final int OR = 12;
-  public static final int IDIV = 24;
-  public static final int DIV = 23;
+  public static final int RP = 32;
   public static final int PLUS = 20;
   public static final int EXIT = 3;
-  public static final int ASSIGN = 26;
+  public static final int ASSIGN = 24;
   public static final int IF = 5;
-  public static final int INTCON = 36;
+  public static final int INTCON = 34;
   public static final int LE = 19;
   public static final int EOF = 0;
   public static final int RETURN = 8;
   public static final int error = 1;
-  public static final int MUL = 22;
   public static final int EQ = 14;
-  public static final int ERROR = 40;
+  public static final int ERROR = 38;
+  public static final int TIMES = 22;
   public static final int ELSE = 2;
   public static final int READ = 7;
   public static final int WHILE = 9;
-  public static final int FLOATCON = 37;
-  public static final int LBR = 29;
+  public static final int FLOATCON = 35;
+  public static final int LBR = 27;
   public static final int FLOAT = 4;
   public static final int NE = 15;
-  public static final int STRING = 38;
-  public static final int LBK = 31;
+  public static final int STRING = 36;
+  public static final int LBK = 29;
   public static final int GT = 16;
-  public static final int IDENTIFIER = 39;
+  public static final int IDENTIFIER = 37;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -70,10 +68,8 @@ public class Tokens {
   "LE",
   "PLUS",
   "MINUS",
-  "MUL",
-  "DIV",
-  "IDIV",
-  "POW",
+  "TIMES",
+  "DIVIDE",
   "ASSIGN",
   "CM",
   "SC",
@@ -81,8 +77,8 @@ public class Tokens {
   "RBR",
   "LBK",
   "RBK",
-  "LPAREN",
-  "RPAREN",
+  "LP",
+  "RP",
   "SQ",
   "INTCON",
   "FLOATCON",

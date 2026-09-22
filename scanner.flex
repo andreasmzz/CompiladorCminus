@@ -19,8 +19,9 @@ import java_cup.runtime.Symbol;
 %% 
  
 /* Espaços e comentários */ 
-" " | \t | \r | \n         { /* ignora */ } 
-"/*" [^*]* "*/"             { /* ignora comentário */ } 
+[ \t\r\n]+         { /* ignora */ } 
+"//"[^\r\n]*        { /* ignora comentári */ } 
+"/*"([^*]|\*+[^*/])*\*+"/"             { /* ignora bloco de comentário */ } 
  
 /* Palavras-chave */ 
 else                        { return token(Tokens.ELSE, yytext()); } 
@@ -49,10 +50,8 @@ write                       { return token(Tokens.WRITE, yytext()); }
 /* Operadores aritméticos */ 
 "+"                         { return token(Tokens.PLUS, yytext()); } 
 "-"                         { return token(Tokens.MINUS, yytext()); } 
-"*"                         { return token(Tokens.MUL, yytext()); } 
-"/"                         { return token(Tokens.DIV, yytext()); } 
-"//"                        { return token(Tokens.IDIV, yytext()); } 
-"**"                        { return token(Tokens.POW, yytext()); } 
+"*"                         { return token(Tokens.TIMES, yytext()); } 
+"/"                         { return token(Tokens.DIVIDE, yytext()); } 
  
 /* Atribuição */ 
 "="                         { return token(Tokens.ASSIGN, yytext()); } 
@@ -64,8 +63,8 @@ write                       { return token(Tokens.WRITE, yytext()); }
 "}"                         { return token(Tokens.RBR, yytext()); } 
 "["                         { return token(Tokens.LBK, yytext()); } 
 "]"                         { return token(Tokens.RBK, yytext()); } 
-"("                         { return token(Tokens.LPAREN, yytext()); } 
-")"                         { return token(Tokens.RPAREN, yytext()); } 
+"("                         { return token(Tokens.LP, yytext()); } 
+")"                         { return token(Tokens.RP, yytext()); } 
 "'"                         { return token(Tokens.SQ, yytext()); } 
  
 /* Constantes */ 

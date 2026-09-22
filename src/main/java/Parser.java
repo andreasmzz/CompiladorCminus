@@ -45,10 +45,10 @@ public class Parser extends java_cup.runtime.lr_parser {
     unpackFromStrings(new String[] {
     "\000\014\000\006\006\007\010\010\001\002\000\004\002" +
     "\016\001\002\000\010\002\000\006\007\010\010\001\002" +
-    "\000\010\002\ufffe\006\ufffe\010\ufffe\001\002\000\004\051" +
-    "\013\001\002\000\004\051\011\001\002\000\004\036\012" +
+    "\000\010\002\ufffe\006\ufffe\010\ufffe\001\002\000\004\047" +
+    "\013\001\002\000\004\047\011\001\002\000\004\034\012" +
     "\001\002\000\010\002\ufffd\006\ufffd\010\ufffd\001\002\000" +
-    "\004\036\014\001\002\000\010\002\ufffc\006\ufffc\010\ufffc" +
+    "\004\034\014\001\002\000\010\002\ufffc\006\ufffc\010\ufffc" +
     "\001\002\000\010\002\uffff\006\uffff\010\uffff\001\002\000" +
     "\004\002\001\001\002" });
 
@@ -233,7 +233,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 9: // Statement ::= READ LPAREN IDENTIFIER RPAREN SC 
+          case 9: // Statement ::= READ LP IDENTIFIER RP SC 
             {
               Object RESULT =null;
 
@@ -242,7 +242,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 10: // Statement ::= WRITE LPAREN Expr RPAREN SC 
+          case 10: // Statement ::= WRITE LP Expr RP SC 
             {
               Object RESULT =null;
 
@@ -251,7 +251,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 11: // Statement ::= IF LPAREN Expr RPAREN Statement 
+          case 11: // Statement ::= IF LP Expr RP Statement 
             {
               Object RESULT =null;
 
@@ -260,7 +260,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 12: // Statement ::= WHILE LPAREN Expr RPAREN Statement 
+          case 12: // Statement ::= WHILE LP Expr RP Statement 
             {
               Object RESULT =null;
 
@@ -296,7 +296,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 16: // Expr ::= Expr MUL Expr 
+          case 16: // Expr ::= Expr TIMES Expr 
             {
               Object RESULT =null;
 
@@ -305,7 +305,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 17: // Expr ::= Expr DIV Expr 
+          case 17: // Expr ::= Expr DIVIDE Expr 
             {
               Object RESULT =null;
 
@@ -341,7 +341,7 @@ class CUP$Parser$actions {
           return CUP$Parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 21: // Expr ::= LPAREN Expr RPAREN 
+          case 21: // Expr ::= LP Expr RP 
             {
               Object RESULT =null;
 
