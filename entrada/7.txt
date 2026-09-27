@@ -1,9 +1,1 @@
-int main() {
-    int n;
-    float f;
-    read(n);
-    read(f);
-    write(n);
-    write(f);
-    return 0;
-}
+a = (a + 1 * (b + 2))/3;

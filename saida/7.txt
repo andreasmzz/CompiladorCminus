@@ -1,46 +1,19 @@
-int main() {
-    int n;
-    float f;
-    read(n);
-    read(f);
-    write(n);
-    write(f);
-    return 0;
-}
+a = (a + 1 * (b + 2))/3;
 
 --- Tokens ---
-<6, int, linha: 1>
-<37, main, linha: 1>
+<37, a, linha: 1>
+<24, =, linha: 1>
 <31, (, linha: 1>
+<37, a, linha: 1>
+<20, +, linha: 1>
+<34, 1, linha: 1>
+<22, *, linha: 1>
+<31, (, linha: 1>
+<37, b, linha: 1>
+<20, +, linha: 1>
+<34, 2, linha: 1>
 <32, ), linha: 1>
-<27, {, linha: 1>
-<6, int, linha: 2>
-<37, n, linha: 2>
-<26, ;, linha: 2>
-<4, float, linha: 3>
-<37, f, linha: 3>
-<26, ;, linha: 3>
-<7, read, linha: 4>
-<31, (, linha: 4>
-<37, n, linha: 4>
-<32, ), linha: 4>
-<26, ;, linha: 4>
-<7, read, linha: 5>
-<31, (, linha: 5>
-<37, f, linha: 5>
-<32, ), linha: 5>
-<26, ;, linha: 5>
-<10, write, linha: 6>
-<31, (, linha: 6>
-<37, n, linha: 6>
-<32, ), linha: 6>
-<26, ;, linha: 6>
-<10, write, linha: 7>
-<31, (, linha: 7>
-<37, f, linha: 7>
-<32, ), linha: 7>
-<26, ;, linha: 7>
-<8, return, linha: 8>
-<34, 0, linha: 8>
-<26, ;, linha: 8>
-<28, }, linha: 9>
+<32, ), linha: 1>
+<23, /, linha: 1>
+<34, 3, linha: 1>
+<26, ;, linha: 1>
