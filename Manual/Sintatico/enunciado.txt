@@ -1,0 +1,79 @@
+Considere a gramática que reconhece expressões matemáticas com
+operações de soma, subtração, multiplicação, divisão, exponenciação (^)
+e expressões entre parênteses, e é definida pela quádrupla G = {V, Σ, R, S},
+onde V = {E, T, F, P}; Σ = {+, −,∗, (, ), ^, num}; S = E; e R é a coleção de
+regras a seguir:
+E -> E + T | E – T | T
+T -> T * F | T / F | F
+F -> P ^ F | P
+P -> ( E ) | num
+A partir dessa gramática, construa:
+    a. Um analisador léxico para reconhecimento dos tokens,
+considerando que num é uma sequência de números com
+separador de casas decimais;
+    b. Construa a tabela de análise sintática LL(1), incluindo os erros que
+podem ocorrer;
+    c. Construa um programa que, dada uma expressão reconhecida pela
+linguagem, faça:
+        i. Execute a análise léxica;
+        ii. Realize a análise sintática por tabela LL(1), manipulação de
+pilha e cadeia de entrada;
+        iii. Mostre os passos do parse;
+
+===========================================================================
+
+Solução:
+
+Eliminadno recursão à esquerda e ambiguidade:
+    E -> TE'
+    E' -> +TE' | -TE' | e
+    T -> FT'
+    T' -> *FT' | /FT' | e
+    F -> PF'
+    F'-> ^F | e
+    P -> (E) | num
+    num -> [0-9]+(\(.|,)[0-9]+)?
+
+Expandindo a gramática:
+     1. E  -> TE'
+     2. E' -> +TE'
+     3. E' -> -TE' 
+     4. E' -> e
+     5. T  -> FT'
+     6. T' -> *FT'
+     7. T' -> /FT'
+     8. T' -> e
+     9. F  -> PF' 
+    10. F' -> ^F
+    11. F' -> e
+    12. P  -> (E)
+    13. P  -> num
+
+Conjuntos Primeiro:
+    P(E)  = { (, num }
+    P(E') = { +, -, e }
+    P(T)  = { (, num }
+    P(T') = { *, /, e }
+    P(F)  = { (, num }
+    P(F') = { ^, e }
+    P(P)  = { (, num }
+
+Conjuntos Sequência:
+    S(E)  = { ), $ }
+    S(E') = { ), $ }
+    S(T)  = { +, -, ), $ }
+    S(T') = { +, -, ), $ }
+    S(F)  = { *, /, +, -, ), $ }
+    S(F') = { *, /, +, -, ), $ }
+    s(P)  = { ^, *, /, +, -, ), $ }
+
+Tabela de Análise Sintática
+    NT |  +  |  -  |  *  |  /  |  ^  |  (  |  )  | num |  $  |
+    E  | err | err | err | err | err |  1  | err |  1  | err |
+    E' |  2  |  3  | err | err | err | err |  4  | err |  4  |
+    T  | err | err | err | err | err |  5  | err |  5  | err |
+    T' |  8  |  8  |  6  |  7  | err | err |  8  | err |  8  |
+    F  | err | err | err | err | err |  9  | err |  9  | err |
+    F' | 11  | 11  | 11  | 11  | 10  | err | 11  | err | 11  |
+    P  | err | err | err | err | err | 12  | err | 13  | err |
+
