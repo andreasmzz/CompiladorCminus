@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Scanner;
 
-public class Main {
+public class MainSintatico {
 
     private static final Path INPUT_FILE = Path.of("Sintatico", "input.txt");
     private static final Path OUTPUT_FILE = Path.of("Sintatico", "output.txt");
@@ -122,7 +122,7 @@ public class Main {
 
         try {
 
-            Lexer lexer = new Lexer(expression);
+            LexerSintatico lexer = new LexerSintatico(expression);
 
             List<Token> tokens = lexer.tokenize();
 
@@ -134,7 +134,7 @@ public class Main {
 
             result.append("\n");
 
-            Parser parser = new Parser();
+            ParserSintatico parser = new ParserSintatico();
 
             result.append(parser.parse(tokens));
 

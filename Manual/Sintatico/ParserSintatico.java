@@ -11,12 +11,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class Parser {
+public class ParserSintatico {
 
     private final Map<String, Map<TokenType, String>> table;
     private final Set<String> nonTerminals;
 
-    public Parser() {
+    public ParserSintatico() {
         this.table = new HashMap<>();
         this.nonTerminals = new HashSet<>();
 

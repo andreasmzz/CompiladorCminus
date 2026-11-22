@@ -15,11 +15,11 @@ enum TokenType {
     EOF
 }
 
-class Token {
+class TokenSintatico {
     private final TokenType type;
     private final String lexeme;
 
-    public Token(TokenType type, String lexeme) {
+    public TokenSintatico(TokenType type, String lexeme) {
         this.type = type;
         this.lexeme = lexeme;
     }
@@ -44,20 +44,20 @@ class LexicalException extends RuntimeException {
     }
 }
 
-public class Lexer { // Avoiding 'Scanner' as Java already has a class named 'Scanner'
+public class LexerSintatico { // Avoiding 'Scanner' as Java already has a class named 'Scanner'
 
     private final String input;
-    private final List<Token> tokens;
+    private final List<TokensSintatico> tokens;
 
     private int position;
 
-    public Lexer(String input) {
+    public LexerSintatico(String input) {
         this.input = input;
         this.tokens = new ArrayList<>();
         this.position = 0;
     }
 
-    public List<Token> tokenize() {
+    public List<TokensSintatico> tokenize() {
         while (position < input.length()) {
             char current = input.charAt(position);
 
@@ -108,7 +108,7 @@ public class Lexer { // Avoiding 'Scanner' as Java already has a class named 'Sc
             }
         }
 
-        tokens.add(new Token(TokenType.EOF, "$"));
+        tokens.add(new TokensSintatico(TokenType.EOF, "$"));
 
         return tokens;
     }
@@ -139,13 +139,13 @@ public class Lexer { // Avoiding 'Scanner' as Java already has a class named 'Sc
 
         String lexeme = input.substring(start, position);
 
-        tokens.add(new Token(TokenType.NUM, lexeme));
+        tokens.add(new TokensSintatico(TokenType.NUM, lexeme));
     }
 
     private void addToken(TokenType type) {
         String lexeme = String.valueOf(input.charAt(position));
 
-        tokens.add(new Token(type, lexeme));
+        tokens.add(new TokensSintatico(type, lexeme));
 
         position++;
     }
