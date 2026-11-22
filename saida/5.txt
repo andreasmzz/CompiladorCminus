@@ -2,11 +2,11 @@ int x[10]@
 
 --- Tokens ---
 <6, int, linha: 1>
-<34, x, linha: 5>
-<29, [, linha: 6>
-<35, 10, linha: 7>
-<30, ], linha: 9>
-<38, Caractere inválido: @, linha: 10>
+<34, x, linha: 1>
+<29, [, linha: 1>
+<35, 10, linha: 1>
+<30, ], linha: 1>
+<38, Caractere inválido: @, linha: 1>
 
 --- Análise Sintática ---
 Erro sintático!

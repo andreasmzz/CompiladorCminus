@@ -19,7 +19,7 @@ public class TokenInfo extends Symbol{
         int coluna,
         Object value
     ) {
-        super(sym, coluna, coluna, value);
+        super(sym, linha, coluna, value);
 
         this.linha = linha;
         this.coluna = coluna;
