@@ -1,19 +1,27 @@
 a = (a + 1 * (b + 2))/3;
 
 --- Tokens ---
-<37, a, linha: 1>
-<24, =, linha: 1>
-<31, (, linha: 1>
-<37, a, linha: 1>
-<20, +, linha: 1>
-<34, 1, linha: 1>
-<22, *, linha: 1>
-<31, (, linha: 1>
-<37, b, linha: 1>
-<20, +, linha: 1>
-<34, 2, linha: 1>
-<32, ), linha: 1>
-<32, ), linha: 1>
-<23, /, linha: 1>
-<34, 3, linha: 1>
-<26, ;, linha: 1>
+<34, a, linha: 1>
+<24, =, linha: 3>
+<31, (, linha: 5>
+<34, a, linha: 6>
+<20, +, linha: 8>
+<35, 1, linha: 10>
+<22, *, linha: 12>
+<31, (, linha: 14>
+<34, b, linha: 15>
+<20, +, linha: 17>
+<35, 2, linha: 19>
+<32, ), linha: 20>
+<32, ), linha: 21>
+<23, /, linha: 22>
+<35, 3, linha: 23>
+<26, ;, linha: 24>
+
+--- Análise Sintática ---
+Erro sintático!
+Token encontrado: a
+Linha: 1
+Coluna: 1
+Resultado: Código sintaticamente inválido.
+Falha na análise: Não foi possível recuperar a análise sintática.

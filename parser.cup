@@ -4,9 +4,45 @@ parser code {:
     // conectar esse parser ao scanner!
     Scanner s;
     Parser(Scanner s){ this.s=s; }
-
+    
     // tabela de símbolos
     java.util.Map<String, Integer> simbolos = new java.util.HashMap<String, Integer>();
+
+    java.io.PrintWriter resultado;
+
+    private boolean erroSintatico = false;
+
+    public Parser(Scanner s, java.io.PrintWriter resultado) {
+        this.s = s;
+        this.resultado = resultado;
+    }
+
+    public boolean houveErroSintatico() {
+        return erroSintatico;
+    }
+
+    @Override
+    public void syntax_error(java_cup.runtime.Symbol cur_token) {
+        erroSintatico = true;
+
+         TokenInfo token = (TokenInfo) cur_token;
+
+        resultado.println("Erro sintático!");
+        resultado.println("Token encontrado: " + cur_token.value);
+        resultado.println("Linha: " + token.linha);
+        resultado.println("Coluna: " + token.coluna);
+    }
+
+    @Override
+    public void unrecovered_syntax_error(
+        java_cup.runtime.Symbol cur_token
+    ) throws java.lang.Exception {
+        erroSintatico = true;
+
+        throw new java.lang.Exception(
+            "Não foi possível recuperar a análise sintática."
+        );
+    }
 :}
 
 /* conectar esse parser ao scanner! */
@@ -19,60 +55,497 @@ terminal EQ, NE, GT, GE, LT, LE;
 terminal PLUS, MINUS, TIMES, DIVIDE;
 terminal ASSIGN;
 terminal CM, SC, LBR, RBR, LBK, RBK, LP, RP, SQ;
-terminal INTCON, FLOATCON, STRING;
-terminal IDENTIFIER;
+terminal String IDENTIFIER, INTCON, FLOATCON, STRING;
 terminal ERROR;
 
-non terminal Program, DeclList, Decl, StatementList, Statement, Expr;
+/* =====================================================
+   NÃO TERMINAIS
+   ===================================================== */
 
-precedence left OR, AND;
-precedence left EQ, NE, LT, LE, GT, GE;
-precedence left PLUS, MINUS;
-precedence left TIMES, DIVIDE;
-precedence right NOT;
+non terminal AstNode Program;
+non terminal AstNode DeclList;
+non terminal AstNode Procedures;
+non terminal AstNode ProcedureDecl;
+non terminal AstNode ProcedureHead;
+non terminal AstNode FunctionDecl;
+non terminal AstNode ProcedureBody;
+non terminal AstNode IdentifierList;
+non terminal AstNode VarDecl;
+non terminal AstNode Type;
+
+non terminal AstNode StatementList;
+non terminal AstNode Statement;
+non terminal AstNode Assignment;
+non terminal AstNode IfStatement;
+non terminal AstNode TestAndThen;
+non terminal AstNode Test;
+non terminal AstNode WhileStatement;
+non terminal AstNode IOStatement;
+non terminal AstNode ReturnStatement;
+non terminal AstNode ExitStatement;
+non terminal AstNode CompoundStatement;
+
+non terminal AstNode Expr;
+non terminal AstNode AndExpr;
+non terminal AstNode NotExpr;
+non terminal AstNode SimpleExpr;
+non terminal AstNode AddExpr;
+non terminal AstNode MulExpr;
+non terminal AstNode Factor;
+non terminal AstNode Variable;
+non terminal AstNode Constant;
+non terminal AstNode StringConstant;
 
 start with Program;
 
-/* ================== REGRAS SIMPLIFICADAS ================== */
 
-Program ::= DeclList ;
+/* =====================================================
+   REGRAS GRAMATICAIS COM AÇÕES SEMÂNTICAS
+   ===================================================== */
 
-DeclList ::= DeclList Decl
-           | Decl
-           ;
 
-Decl ::= INT IDENTIFIER SC
-       | FLOAT IDENTIFIER SC
-       ;
+/* ---------------- PROGRAM ---------------- */
 
-StatementList ::= StatementList Statement
-                | Statement
-                ;
+Program ::=
+      DeclList:d Procedures:p
+      {:
+          RESULT = new AstNode("Program", d, p);
+      :}
+    | Procedures:p
+      {:
+          RESULT = new AstNode("Program", p);
+      :}
+    ;
 
-Statement ::= IDENTIFIER ASSIGN Expr SC
-            | READ LP IDENTIFIER RP SC
-            | WRITE LP Expr RP SC
-            | IF LP Expr RP Statement
-            | WHILE LP Expr RP Statement
-            | LBR StatementList RBR
-            ;
 
-stmt ::= error:err 
-        {: 
-            System.err.println("Erro sintático próximo ao token: " + err.value); 
-        :}
-      | ERROR:err
-        {: 
-            System.err.println("Erro léxico: " + err.value); 
-        :}
-      ;
+/* ---------------- PROCEDURES ---------------- */
 
-Expr ::= Expr PLUS Expr
-       | Expr MINUS Expr
-       | Expr TIMES Expr
-       | Expr DIVIDE Expr
-       | IDENTIFIER
-       | INTCON
-       | FLOATCON
-       | LP Expr RP
-       ;
+Procedures ::=
+      ProcedureDecl:p
+      {:
+          RESULT = new AstNode("Procedures", p);
+      :}
+    | ProcedureDecl:p Procedures:ps
+      {:
+          RESULT = new AstNode("Procedures", p, ps);
+      :}
+    ;
+
+ProcedureDecl ::=
+    ProcedureHead:h ProcedureBody:b
+    {:
+        RESULT = new AstNode("ProcedureDecl", h, b);
+    :}
+    ;
+
+ProcedureHead ::=
+      FunctionDecl:f DeclList:d
+      {:
+          RESULT = new AstNode("ProcedureHead", f, d);
+      :}
+    | FunctionDecl:f
+      {:
+          RESULT = new AstNode("ProcedureHead", f);
+      :}
+    ;
+
+FunctionDecl ::=
+    Type:t IDENTIFIER:id LP RP LBR
+    {:
+        RESULT = new AstNode(
+            "FunctionDecl: " + id,
+            t
+        );
+    :}
+    ;
+
+ProcedureBody ::=
+    StatementList:s RBR
+    {:
+        RESULT = new AstNode("ProcedureBody", s);
+    :}
+    ;
+
+
+/* ---------------- DECLARAÇÕES ---------------- */
+
+DeclList ::=
+      Type:t IdentifierList:i SC
+      {:
+          RESULT = new AstNode("DeclList", t, i);
+      :}
+    | DeclList:d Type:t IdentifierList:i SC
+      {:
+          RESULT = new AstNode("DeclList", d, t, i);
+      :}
+    ;
+
+IdentifierList ::=
+      VarDecl:v
+      {:
+          RESULT = new AstNode("IdentifierList", v);
+      :}
+    | IdentifierList:i CM VarDecl:v
+      {:
+          RESULT = new AstNode("IdentifierList", i, v);
+      :}
+    ;
+
+VarDecl ::=
+      IDENTIFIER:id
+      {:
+          RESULT = new AstNode("VariableDeclaration: " + id);
+      :}
+    | IDENTIFIER:id LBK INTCON:n RBK
+      {:
+          RESULT = new AstNode(
+              "ArrayDeclaration: " + id + "[" + n + "]"
+          );
+      :}
+    ;
+
+Type ::=
+      INT
+      {:
+          RESULT = new AstNode("Type: int");
+      :}
+    | FLOAT
+      {:
+          RESULT = new AstNode("Type: float");
+      :}
+    ;
+
+
+/* ---------------- COMANDOS ---------------- */
+
+StatementList ::=
+      Statement:s
+      {:
+          RESULT = new AstNode("StatementList", s);
+      :}
+    | StatementList:sl Statement:s
+      {:
+          RESULT = new AstNode("StatementList", sl, s);
+      :}
+    ;
+
+Statement ::=
+      Assignment:a
+      {:
+          RESULT = a;
+      :}
+    | IfStatement:i
+      {:
+          RESULT = i;
+      :}
+    | WhileStatement:w
+      {:
+          RESULT = w;
+      :}
+    | IOStatement:io
+      {:
+          RESULT = io;
+      :}
+    | ReturnStatement:r
+      {:
+          RESULT = r;
+      :}
+    | ExitStatement:e
+      {:
+          RESULT = e;
+      :}
+    | CompoundStatement:c
+      {:
+          RESULT = c;
+      :}
+    ;
+
+
+/* ---------------- ATRIBUIÇÃO ---------------- */
+
+Assignment ::=
+    Variable:v ASSIGN Expr:e SC
+    {:
+        RESULT = new AstNode("Assignment", v, e);
+    :}
+    ;
+
+
+/* ---------------- IF / ELSE ---------------- */
+
+IfStatement ::=
+      IF TestAndThen:t ELSE CompoundStatement:c
+      {:
+          RESULT = new AstNode("IfElse", t, c);
+      :}
+    | IF TestAndThen:t
+      {:
+          RESULT = new AstNode("If", t);
+      :}
+    ;
+
+TestAndThen ::=
+    Test:t CompoundStatement:c
+    {:
+        RESULT = new AstNode("TestAndThen", t, c);
+    :}
+    ;
+
+Test ::=
+    LP Expr:e RP
+    {:
+        RESULT = new AstNode("Test", e);
+    :}
+    ;
+
+
+/* ---------------- WHILE ---------------- */
+
+WhileStatement ::=
+    WHILE LP Expr:e RP Statement:s
+    {:
+        RESULT = new AstNode("While", e, s);
+    :}
+    ;
+
+
+/* ---------------- ENTRADA E SAÍDA ---------------- */
+
+IOStatement ::=
+      READ LP Variable:v RP SC
+      {:
+          RESULT = new AstNode("Read", v);
+      :}
+    | WRITE LP Expr:e RP SC
+      {:
+          RESULT = new AstNode("Write", e);
+      :}
+    | WRITE LP StringConstant:s RP SC
+      {:
+          RESULT = new AstNode("Write", s);
+      :}
+    ;
+
+
+/* ---------------- RETURN ---------------- */
+
+ReturnStatement ::=
+    RETURN Expr:e SC
+    {:
+        RESULT = new AstNode("Return", e);
+    :}
+    ;
+
+
+/* ---------------- EXIT ---------------- */
+
+ExitStatement ::=
+    EXIT SC
+    {:
+        RESULT = new AstNode("Exit");
+    :}
+    ;
+
+
+/* ---------------- BLOCO COMPOSTO ---------------- */
+
+CompoundStatement ::=
+    LBR StatementList:s RBR
+    {:
+        RESULT = new AstNode("CompoundStatement", s);
+    :}
+    ;
+
+
+/* =====================================================
+   EXPRESSÕES
+   ===================================================== */
+
+
+/* ---------------- EXPRESSÕES LÓGICAS ---------------- */
+
+Expr ::=
+      Expr:e OR AndExpr:a
+      {:
+          RESULT = new AstNode("OR", e, a);
+      :}
+    | AndExpr:a
+      {:
+          RESULT = a;
+      :}
+    ;
+
+AndExpr ::=
+      AndExpr:a AND NotExpr:n
+      {:
+          RESULT = new AstNode("AND", a, n);
+      :}
+    | NotExpr:n
+      {:
+          RESULT = n;
+      :}
+    ;
+
+NotExpr ::=
+      NOT SimpleExpr:s
+      {:
+          RESULT = new AstNode("NOT", s);
+      :}
+    | SimpleExpr:s
+      {:
+          RESULT = s;
+      :}
+    ;
+
+
+/* ---------------- EXPRESSÕES RELACIONAIS ---------------- */
+
+SimpleExpr ::=
+      SimpleExpr:s EQ AddExpr:a
+      {:
+          RESULT = new AstNode("EQUAL", s, a);
+      :}
+    | SimpleExpr:s NE AddExpr:a
+      {:
+          RESULT = new AstNode("NOT_EQUAL", s, a);
+      :}
+    | SimpleExpr:s LE AddExpr:a
+      {:
+          RESULT = new AstNode("LESS_EQUAL", s, a);
+      :}
+    | SimpleExpr:s LT AddExpr:a
+      {:
+          RESULT = new AstNode("LESS_THAN", s, a);
+      :}
+    | SimpleExpr:s GE AddExpr:a
+      {:
+          RESULT = new AstNode("GREATER_EQUAL", s, a);
+      :}
+    | SimpleExpr:s GT AddExpr:a
+      {:
+          RESULT = new AstNode("GREATER_THAN", s, a);
+      :}
+    | AddExpr:a
+      {:
+          RESULT = a;
+      :}
+    ;
+
+
+/* ---------------- EXPRESSÕES ADITIVAS ---------------- */
+
+AddExpr ::=
+      AddExpr:a PLUS MulExpr:m
+      {:
+          RESULT = new AstNode("ADDITION", a, m);
+      :}
+    | AddExpr:a MINUS MulExpr:m
+      {:
+          RESULT = new AstNode("SUBTRACTION", a, m);
+      :}
+    | MulExpr:m
+      {:
+          RESULT = m;
+      :}
+    ;
+
+
+/* ---------------- EXPRESSÕES MULTIPLICATIVAS ---------------- */
+
+MulExpr ::=
+      MulExpr:m TIMES Factor:f
+      {:
+          RESULT = new AstNode("MULTIPLICATION", m, f);
+      :}
+    | MulExpr:m DIVIDE Factor:f
+      {:
+          RESULT = new AstNode("DIVISION", m, f);
+      :}
+    | Factor:f
+      {:
+          RESULT = f;
+      :}
+    ;
+
+
+/* ---------------- FATORES ---------------- */
+
+Factor ::=
+      Variable:v
+      {:
+          RESULT = v;
+      :}
+    | Constant:c
+      {:
+          RESULT = c;
+      :}
+    | IDENTIFIER:id LP RP
+      {:
+          RESULT = new AstNode("FunctionCall: " + id);
+      :}
+    | LP Expr:e RP
+      {:
+          RESULT = new AstNode("ParenthesizedExpression", e);
+      :}
+    ;
+
+
+/* ---------------- VARIÁVEIS ---------------- */
+
+Variable ::=
+      IDENTIFIER:id
+      {:
+          RESULT = new AstNode("Variable: " + id);
+      :}
+    | IDENTIFIER:id LBK Expr:e RBK
+      {:
+          RESULT = new AstNode("ArrayAccess: " + id, e);
+      :}
+    ;
+
+
+/* ---------------- CONSTANTES STRING ---------------- */
+
+StringConstant ::=
+    STRING:s
+    {:
+        RESULT = new AstNode("String: " + s);
+    :}
+    ;
+
+
+/* ---------------- CONSTANTES NUMÉRICAS ---------------- */
+
+Constant ::=
+      INTCON:n
+      {:
+          RESULT = new AstNode("Integer: " + n);
+      :}
+    | FLOATCON:n
+      {:
+          RESULT = new AstNode("Float: " + n);
+      :}
+    ;
+
+
+/* =====================================================
+   TRATAMENTO DE ERROS
+   ===================================================== */
+
+/* Erro léxico recebido do JFlex */
+
+Statement ::=
+    ERROR:e
+    {:
+        RESULT = new AstNode("LexicalError: " + e);
+    :}
+    ;
+
+/* Recuperação de erro sintático até o ponto e vírgula */
+
+Statement ::=
+    error SC
+    {:
+        RESULT = new AstNode("SyntaxError: comando inválido");
+    :}
+    ;

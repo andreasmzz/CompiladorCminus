@@ -1,7 +1,15 @@
 i = 3;
 
 --- Tokens ---
-<37, i, linha: 1>
-<24, =, linha: 1>
-<34, 3, linha: 1>
-<26, ;, linha: 1>
+<34, i, linha: 1>
+<24, =, linha: 3>
+<35, 3, linha: 5>
+<26, ;, linha: 6>
+
+--- Análise Sintática ---
+Erro sintático!
+Token encontrado: i
+Linha: 1
+Coluna: 1
+Resultado: Código sintaticamente inválido.
+Falha na análise: Não foi possível recuperar a análise sintática.

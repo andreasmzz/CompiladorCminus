@@ -8,36 +8,78 @@ int main() {
 
 --- Tokens ---
 <6, int, linha: 1>
-<37, main, linha: 1>
-<31, (, linha: 1>
-<32, ), linha: 1>
-<27, {, linha: 1>
-<6, int, linha: 2>
-<37, x, linha: 2>
-<25, ,, linha: 2>
-<37, y, linha: 2>
-<25, ,, linha: 2>
-<37, z, linha: 2>
-<26, ;, linha: 2>
-<37, x, linha: 3>
-<24, =, linha: 3>
-<34, 5, linha: 3>
-<26, ;, linha: 3>
-<37, y, linha: 4>
-<24, =, linha: 4>
-<34, 2, linha: 4>
-<26, ;, linha: 4>
-<37, z, linha: 5>
-<24, =, linha: 5>
-<37, x, linha: 5>
-<20, +, linha: 5>
-<37, y, linha: 5>
-<22, *, linha: 5>
-<34, 3, linha: 5>
-<21, -, linha: 5>
-<34, 1, linha: 5>
-<26, ;, linha: 5>
-<8, return, linha: 6>
-<34, 0, linha: 6>
-<26, ;, linha: 6>
-<28, }, linha: 7>
+<34, main, linha: 5>
+<31, (, linha: 9>
+<32, ), linha: 10>
+<27, {, linha: 12>
+<6, int, linha: 5>
+<34, x, linha: 9>
+<25, ,, linha: 10>
+<34, y, linha: 12>
+<25, ,, linha: 13>
+<34, z, linha: 15>
+<26, ;, linha: 16>
+<34, x, linha: 5>
+<24, =, linha: 7>
+<35, 5, linha: 9>
+<26, ;, linha: 10>
+<34, y, linha: 5>
+<24, =, linha: 7>
+<35, 2, linha: 9>
+<26, ;, linha: 10>
+<34, z, linha: 5>
+<24, =, linha: 7>
+<34, x, linha: 9>
+<20, +, linha: 11>
+<34, y, linha: 13>
+<22, *, linha: 15>
+<35, 3, linha: 17>
+<21, -, linha: 19>
+<35, 1, linha: 21>
+<26, ;, linha: 22>
+<8, return, linha: 5>
+<35, 0, linha: 12>
+<26, ;, linha: 13>
+<28, }, linha: 1>
+
+--- Análise Sintática ---
+Código sintaticamente válido.
+
+--- Árvore Sintática ---
+└── Program
+    └── Procedures
+        └── ProcedureDecl
+            ├── ProcedureHead
+            │   ├── FunctionDecl: main
+            │   │   └── Type: int
+            │   └── DeclList
+            │       ├── Type: int
+            │       └── IdentifierList
+            │           ├── IdentifierList
+            │           │   ├── IdentifierList
+            │           │   │   └── VariableDeclaration: x
+            │           │   └── VariableDeclaration: y
+            │           └── VariableDeclaration: z
+            └── ProcedureBody
+                └── StatementList
+                    ├── StatementList
+                    │   ├── StatementList
+                    │   │   ├── StatementList
+                    │   │   │   └── Assignment
+                    │   │   │       ├── Variable: x
+                    │   │   │       └── Integer: 5
+                    │   │   └── Assignment
+                    │   │       ├── Variable: y
+                    │   │       └── Integer: 2
+                    │   └── Assignment
+                    │       ├── Variable: z
+                    │       └── SUBTRACTION
+                    │           ├── ADDITION
+                    │           │   ├── Variable: x
+                    │           │   └── MULTIPLICATION
+                    │           │       ├── Variable: y
+                    │           │       └── Integer: 3
+                    │           └── Integer: 1
+                    └── Return
+                        └── Integer: 0
+

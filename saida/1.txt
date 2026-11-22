@@ -8,27 +8,34 @@ int main() {~~
 
 --- Tokens ---
 <6, int, linha: 1>
-<37, main, linha: 1>
-<31, (, linha: 1>
-<32, ), linha: 1>
-<27, {, linha: 1>
-<38, Caractere inv�lido: ~, linha: 1>
-<38, Caractere inv�lido: ~, linha: 1>
-<6, int, linha: 2>
-<37, a, linha: 2>
-<26, ;, linha: 2>
-<4, float, linha: 3>
-<37, b, linha: 3>
-<26, ;, linha: 3>
-<37, a, linha: 4>
-<24, =, linha: 4>
-<34, 10, linha: 4>
-<26, ;, linha: 4>
-<37, b, linha: 5>
-<24, =, linha: 5>
-<35, 3.14, linha: 5>
-<26, ;, linha: 5>
-<8, return, linha: 6>
-<34, 0, linha: 6>
-<26, ;, linha: 6>
-<28, }, linha: 7>
+<34, main, linha: 5>
+<31, (, linha: 9>
+<32, ), linha: 10>
+<27, {, linha: 12>
+<38, Caractere inválido: ~, linha: 13>
+<38, Caractere inválido: ~, linha: 14>
+<6, int, linha: 5>
+<34, a, linha: 9>
+<26, ;, linha: 10>
+<4, float, linha: 5>
+<34, b, linha: 11>
+<26, ;, linha: 12>
+<34, a, linha: 5>
+<24, =, linha: 7>
+<35, 10, linha: 9>
+<26, ;, linha: 11>
+<34, b, linha: 5>
+<24, =, linha: 7>
+<36, 3.14, linha: 9>
+<26, ;, linha: 13>
+<8, return, linha: 5>
+<35, 0, linha: 12>
+<26, ;, linha: 13>
+<28, }, linha: 1>
+
+--- Análise Sintática ---
+Erro sintático!
+Token encontrado: int
+Linha: 2
+Coluna: 5
+Código sintaticamente inválido.

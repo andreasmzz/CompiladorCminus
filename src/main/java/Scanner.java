@@ -274,7 +274,6 @@ class Scanner implements java_cup.runtime.Scanner {
   private int yyline;
 
   /** Number of characters from the last newline up to the start of the matched text. */
-  @SuppressWarnings("unused")
   private int yycolumn;
 
   /** Number of characters up to the start of the matched text. */
@@ -289,7 +288,7 @@ class Scanner implements java_cup.runtime.Scanner {
 
   /* user code: */
     private Symbol token(int tipo, String valor) {
-        return new Symbol(tipo, yyline + 1, yyline + 1, valor);
+        return new TokenInfo(tipo, yyline + 1, yycolumn + 1, valor);
     }
 
 
@@ -590,10 +589,12 @@ class Scanner implements java_cup.runtime.Scanner {
         case '\u2028':  // fall through
         case '\u2029':
           yyline++;
+          yycolumn = 0;
           zzR = false;
           break;
         case '\r':
           yyline++;
+          yycolumn = 0;
           zzR = true;
           break;
         case '\n':
@@ -601,10 +602,12 @@ class Scanner implements java_cup.runtime.Scanner {
             zzR = false;
           else {
             yyline++;
+            yycolumn = 0;
           }
           break;
         default:
           zzR = false;
+          yycolumn += zzCharCount;
         }
       }
 

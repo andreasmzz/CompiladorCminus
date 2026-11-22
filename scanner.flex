@@ -4,7 +4,7 @@ import java_cup.runtime.Symbol;
 
 %{
     private Symbol token(int tipo, String valor) {
-        return new Symbol(tipo, yyline + 1, yyline + 1, valor);
+        return new TokenInfo(tipo, yyline + 1, yycolumn + 1, valor);
     }
 %}
  
@@ -12,6 +12,7 @@ import java_cup.runtime.Symbol;
 %cup 
 %full 
 %line 
+%column
 %char 
 %eofval{ 
     return new Symbol(Tokens.EOF, new String("Fim do arquivo")); 

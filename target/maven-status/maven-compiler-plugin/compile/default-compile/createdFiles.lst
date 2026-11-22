@@ -1,6 +1,8 @@
-GeraResultados.class
+TokenInfo.class
+AstNode.class
 Compilador.class
-Parser$CUP$Parser$actions.class
-Tokens.class
 Scanner.class
 Parser.class
+GeraResultados.class
+Parser$CUP$Parser$actions.class
+Tokens.class

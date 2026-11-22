@@ -26,7 +26,7 @@ public class Tokens {
   public static final int EXIT = 3;
   public static final int ASSIGN = 24;
   public static final int IF = 5;
-  public static final int INTCON = 34;
+  public static final int INTCON = 35;
   public static final int LE = 19;
   public static final int EOF = 0;
   public static final int RETURN = 8;
@@ -37,14 +37,14 @@ public class Tokens {
   public static final int ELSE = 2;
   public static final int READ = 7;
   public static final int WHILE = 9;
-  public static final int FLOATCON = 35;
+  public static final int FLOATCON = 36;
   public static final int LBR = 27;
   public static final int FLOAT = 4;
   public static final int NE = 15;
-  public static final int STRING = 36;
+  public static final int STRING = 37;
   public static final int LBK = 29;
   public static final int GT = 16;
-  public static final int IDENTIFIER = 37;
+  public static final int IDENTIFIER = 34;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -80,10 +80,10 @@ public class Tokens {
   "LP",
   "RP",
   "SQ",
+  "IDENTIFIER",
   "INTCON",
   "FLOATCON",
   "STRING",
-  "IDENTIFIER",
   "ERROR"
   };
 }
