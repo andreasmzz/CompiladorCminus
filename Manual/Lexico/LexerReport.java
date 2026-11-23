@@ -6,9 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-
-import java_cup.Lexer;
-
 import java.util.ArrayList;
 
 public class LexerReport {

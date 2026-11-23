@@ -108,7 +108,7 @@ public class MainLexico {
 
             token = lexer.nextToken();
 
-            if (token.type == Tokens.EOF) {
+            if (token.type == TokensLexico.EOF) {
                 break;
             }
 

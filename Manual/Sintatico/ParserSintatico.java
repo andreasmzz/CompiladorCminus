@@ -94,7 +94,7 @@ public class ParserSintatico {
         addProduction("P", TokenType.NUM, "NUM");
     }
 
-    public String parse(List<Token> tokens) {
+    public String parse(List<TokenSintatico> tokens) {
 
         StringBuilder result = new StringBuilder();
 
@@ -110,7 +110,7 @@ public class ParserSintatico {
 
         while (!stack.isEmpty()) {
 
-            Token lookahead = tokens.get(position);
+            TokenSintatico lookahead = tokens.get(position);
             String top = stack.peek();
 
             String stackState = getStackState(stack);
@@ -230,7 +230,7 @@ public class ParserSintatico {
         return state.toString().trim();
     }
 
-    private String getInputState(List<Token> tokens, int position) {
+    private String getInputState(List<TokenSintatico> tokens, int position) {
 
         StringBuilder state = new StringBuilder();
 

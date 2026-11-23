@@ -124,11 +124,11 @@ public class MainSintatico {
 
             LexerSintatico lexer = new LexerSintatico(expression);
 
-            List<Token> tokens = lexer.tokenize();
+            List<TokenSintatico> tokens = lexer.tokenize();
 
             result.append("TOKENS RECONHECIDOS\n");
 
-            for (Token token : tokens) {
+            for (TokenSintatico token : tokens) {
                 result.append(token).append("\n");
             }
 

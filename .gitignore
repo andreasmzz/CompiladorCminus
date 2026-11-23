@@ -1,0 +1,8 @@
+# Todos os arquivos compilados de Java
+*.class
+
+# Maven - output (garantia)
+target/
+
+# Manual - output (garantia)
+Manual/bin/

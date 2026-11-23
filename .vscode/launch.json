@@ -1,0 +1,17 @@
+
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Run MainLexico",
+            "request": "launch",
+            "mainClass": "MainLexico",
+            "classPaths": [
+                "$Auto",
+                "${workspaceFolder}/Manual/bin/Lexico"
+            ],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}

@@ -47,7 +47,7 @@ class LexicalException extends RuntimeException {
 public class LexerSintatico { // Avoiding 'Scanner' as Java already has a class named 'Scanner'
 
     private final String input;
-    private final List<TokensSintatico> tokens;
+    private final List<TokenSintatico> tokens;
 
     private int position;
 
@@ -57,7 +57,7 @@ public class LexerSintatico { // Avoiding 'Scanner' as Java already has a class 
         this.position = 0;
     }
 
-    public List<TokensSintatico> tokenize() {
+    public List<TokenSintatico> tokenize() {
         while (position < input.length()) {
             char current = input.charAt(position);
 
@@ -108,7 +108,7 @@ public class LexerSintatico { // Avoiding 'Scanner' as Java already has a class 
             }
         }
 
-        tokens.add(new TokensSintatico(TokenType.EOF, "$"));
+        tokens.add(new TokenSintatico(TokenType.EOF, "$"));
 
         return tokens;
     }
@@ -139,13 +139,13 @@ public class LexerSintatico { // Avoiding 'Scanner' as Java already has a class 
 
         String lexeme = input.substring(start, position);
 
-        tokens.add(new TokensSintatico(TokenType.NUM, lexeme));
+        tokens.add(new TokenSintatico(TokenType.NUM, lexeme));
     }
 
     private void addToken(TokenType type) {
         String lexeme = String.valueOf(input.charAt(position));
 
-        tokens.add(new TokensSintatico(type, lexeme));
+        tokens.add(new TokenSintatico(type, lexeme));
 
         position++;
     }
