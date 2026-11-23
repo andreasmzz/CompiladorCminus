@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileComparator {
+public class ComparatorLexico {
 
     public static boolean compare(Path manualFile, Path referenceFile) throws IOException {
 

@@ -24,7 +24,7 @@ pilha e cadeia de entrada;
 
 Solução:
 
-Eliminadno recursão à esquerda e ambiguidade:
+Eliminando recursão à esquerda e ambiguidade:
     E -> TE'
     E' -> +TE' | -TE' | e
     T -> FT'
@@ -32,7 +32,6 @@ Eliminadno recursão à esquerda e ambiguidade:
     F -> PF'
     F'-> ^F | e
     P -> (E) | num
-    num -> [0-9]+(\(.|,)[0-9]+)?
 
 Expandindo a gramática:
      1. E  -> TE'
