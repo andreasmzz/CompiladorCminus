@@ -43,6 +43,9 @@ parser code {:
             "Não foi possível recuperar a análise sintática."
         );
     }
+    private int linha(AstNode no) {
+        return no != null ? no.getLinha() : 0;
+    }
 :}
 
 /* conectar esse parser ao scanner! */
@@ -99,8 +102,9 @@ non terminal AstNode StringConstant;
 start with Program;
 
 
+
 /* =====================================================
-   REGRAS GRAMATICAIS COM AÇÕES SEMÂNTICAS
+   REGRAS GRAMATICAIS COM AÇÕES SEMÂNTICAS E LINHAS
    ===================================================== */
 
 
@@ -109,11 +113,11 @@ start with Program;
 Program ::=
       DeclList:d Procedures:p
       {:
-          RESULT = new AstNode("Program", d, p);
+          RESULT = new AstNode("Program", linha(d), d, p);
       :}
     | Procedures:p
       {:
-          RESULT = new AstNode("Program", p);
+          RESULT = new AstNode("Program", linha(p), p);
       :}
     ;
 
@@ -123,29 +127,29 @@ Program ::=
 Procedures ::=
       ProcedureDecl:p
       {:
-          RESULT = new AstNode("Procedures", p);
+          RESULT = new AstNode("Procedures", linha(p), p);
       :}
     | ProcedureDecl:p Procedures:ps
       {:
-          RESULT = new AstNode("Procedures", p, ps);
+          RESULT = new AstNode("Procedures", linha(p), p, ps);
       :}
     ;
 
 ProcedureDecl ::=
     ProcedureHead:h ProcedureBody:b
     {:
-        RESULT = new AstNode("ProcedureDecl", h, b);
+        RESULT = new AstNode("ProcedureDecl", linha(h), h, b);
     :}
     ;
 
 ProcedureHead ::=
       FunctionDecl:f DeclList:d
       {:
-          RESULT = new AstNode("ProcedureHead", f, d);
+          RESULT = new AstNode("ProcedureHead", linha(f), f, d);
       :}
     | FunctionDecl:f
       {:
-          RESULT = new AstNode("ProcedureHead", f);
+          RESULT = new AstNode("ProcedureHead", linha(f), f);
       :}
     ;
 
@@ -154,6 +158,7 @@ FunctionDecl ::=
     {:
         RESULT = new AstNode(
             "FunctionDecl: " + id,
+            linha(t),
             t
         );
     :}
@@ -162,7 +167,7 @@ FunctionDecl ::=
 ProcedureBody ::=
     StatementList:s RBR
     {:
-        RESULT = new AstNode("ProcedureBody", s);
+        RESULT = new AstNode("ProcedureBody", linha(s), s);
     :}
     ;
 
@@ -172,46 +177,66 @@ ProcedureBody ::=
 DeclList ::=
       Type:t IdentifierList:i SC
       {:
-          RESULT = new AstNode("DeclList", t, i);
+          RESULT = new AstNode(
+              "DeclList",
+              linha(t),
+              t, i
+          );
       :}
     | DeclList:d Type:t IdentifierList:i SC
       {:
-          RESULT = new AstNode("DeclList", d, t, i);
+          RESULT = new AstNode(
+              "DeclList",
+              linha(d),
+              d, t, i
+          );
       :}
     ;
 
 IdentifierList ::=
       VarDecl:v
       {:
-          RESULT = new AstNode("IdentifierList", v);
+          RESULT = new AstNode(
+              "IdentifierList",
+              linha(v),
+              v
+          );
       :}
     | IdentifierList:i CM VarDecl:v
       {:
-          RESULT = new AstNode("IdentifierList", i, v);
+          RESULT = new AstNode(
+              "IdentifierList",
+              linha(i),
+              i, v
+          );
       :}
     ;
 
 VarDecl ::=
       IDENTIFIER:id
       {:
-          RESULT = new AstNode("VariableDeclaration: " + id);
+          RESULT = new AstNode(
+              "VariableDeclaration: " + id,
+              idleft
+          );
       :}
     | IDENTIFIER:id LBK INTCON:n RBK
       {:
           RESULT = new AstNode(
-              "ArrayDeclaration: " + id + "[" + n + "]"
+              "ArrayDeclaration: " + id + "[" + n + "]",
+              idleft
           );
       :}
     ;
 
 Type ::=
-      INT
+      INT:t
       {:
-          RESULT = new AstNode("Type: int");
+          RESULT = new AstNode("Type: int", tleft);
       :}
-    | FLOAT
+    | FLOAT:t
       {:
-          RESULT = new AstNode("Type: float");
+          RESULT = new AstNode("Type: float", tleft);
       :}
     ;
 
@@ -221,11 +246,19 @@ Type ::=
 StatementList ::=
       Statement:s
       {:
-          RESULT = new AstNode("StatementList", s);
+          RESULT = new AstNode(
+              "StatementList",
+              linha(s),
+              s
+          );
       :}
     | StatementList:sl Statement:s
       {:
-          RESULT = new AstNode("StatementList", sl, s);
+          RESULT = new AstNode(
+              "StatementList",
+              linha(sl),
+              sl, s
+          );
       :}
     ;
 
@@ -266,7 +299,11 @@ Statement ::=
 Assignment ::=
     Variable:v ASSIGN Expr:e SC
     {:
-        RESULT = new AstNode("Assignment", v, e);
+        RESULT = new AstNode(
+            "Assignment",
+            linha(v),
+            v, e
+        );
     :}
     ;
 
@@ -274,27 +311,43 @@ Assignment ::=
 /* ---------------- IF / ELSE ---------------- */
 
 IfStatement ::=
-      IF TestAndThen:t ELSE CompoundStatement:c
+      IF:inicio TestAndThen:t ELSE CompoundStatement:c
       {:
-          RESULT = new AstNode("IfElse", t, c);
+          RESULT = new AstNode(
+              "IfElse",
+              inicioleft,
+              t, c
+          );
       :}
-    | IF TestAndThen:t
+    | IF:inicio TestAndThen:t
       {:
-          RESULT = new AstNode("If", t);
+          RESULT = new AstNode(
+              "If",
+              inicioleft,
+              t
+          );
       :}
     ;
 
 TestAndThen ::=
     Test:t CompoundStatement:c
     {:
-        RESULT = new AstNode("TestAndThen", t, c);
+        RESULT = new AstNode(
+            "TestAndThen",
+            linha(t),
+            t, c
+        );
     :}
     ;
 
 Test ::=
-    LP Expr:e RP
+    LP:inicio Expr:e RP
     {:
-        RESULT = new AstNode("Test", e);
+        RESULT = new AstNode(
+            "Test",
+            inicioleft,
+            e
+        );
     :}
     ;
 
@@ -302,9 +355,13 @@ Test ::=
 /* ---------------- WHILE ---------------- */
 
 WhileStatement ::=
-    WHILE LP Expr:e RP Statement:s
+    WHILE:inicio LP Expr:e RP Statement:s
     {:
-        RESULT = new AstNode("While", e, s);
+        RESULT = new AstNode(
+            "While",
+            inicioleft,
+            e, s
+        );
     :}
     ;
 
@@ -312,17 +369,29 @@ WhileStatement ::=
 /* ---------------- ENTRADA E SAÍDA ---------------- */
 
 IOStatement ::=
-      READ LP Variable:v RP SC
+      READ:inicio LP Variable:v RP SC
       {:
-          RESULT = new AstNode("Read", v);
+          RESULT = new AstNode(
+              "Read",
+              inicioleft,
+              v
+          );
       :}
-    | WRITE LP Expr:e RP SC
+    | WRITE:inicio LP Expr:e RP SC
       {:
-          RESULT = new AstNode("Write", e);
+          RESULT = new AstNode(
+              "Write",
+              inicioleft,
+              e
+          );
       :}
-    | WRITE LP StringConstant:s RP SC
+    | WRITE:inicio LP StringConstant:s RP SC
       {:
-          RESULT = new AstNode("Write", s);
+          RESULT = new AstNode(
+              "Write",
+              inicioleft,
+              s
+          );
       :}
     ;
 
@@ -330,9 +399,13 @@ IOStatement ::=
 /* ---------------- RETURN ---------------- */
 
 ReturnStatement ::=
-    RETURN Expr:e SC
+    RETURN:inicio Expr:e SC
     {:
-        RESULT = new AstNode("Return", e);
+        RESULT = new AstNode(
+            "Return",
+            inicioleft,
+            e
+        );
     :}
     ;
 
@@ -340,9 +413,9 @@ ReturnStatement ::=
 /* ---------------- EXIT ---------------- */
 
 ExitStatement ::=
-    EXIT SC
+    EXIT:inicio SC
     {:
-        RESULT = new AstNode("Exit");
+        RESULT = new AstNode("Exit", inicioleft);
     :}
     ;
 
@@ -350,9 +423,13 @@ ExitStatement ::=
 /* ---------------- BLOCO COMPOSTO ---------------- */
 
 CompoundStatement ::=
-    LBR StatementList:s RBR
+    LBR:inicio StatementList:s RBR
     {:
-        RESULT = new AstNode("CompoundStatement", s);
+        RESULT = new AstNode(
+            "CompoundStatement",
+            inicioleft,
+            s
+        );
     :}
     ;
 
@@ -367,7 +444,11 @@ CompoundStatement ::=
 Expr ::=
       Expr:e OR AndExpr:a
       {:
-          RESULT = new AstNode("OR", e, a);
+          RESULT = new AstNode(
+              "OR",
+              linha(e),
+              e, a
+          );
       :}
     | AndExpr:a
       {:
@@ -378,7 +459,11 @@ Expr ::=
 AndExpr ::=
       AndExpr:a AND NotExpr:n
       {:
-          RESULT = new AstNode("AND", a, n);
+          RESULT = new AstNode(
+              "AND",
+              linha(a),
+              a, n
+          );
       :}
     | NotExpr:n
       {:
@@ -387,9 +472,13 @@ AndExpr ::=
     ;
 
 NotExpr ::=
-      NOT SimpleExpr:s
+      NOT:inicio SimpleExpr:s
       {:
-          RESULT = new AstNode("NOT", s);
+          RESULT = new AstNode(
+              "NOT",
+              inicioleft,
+              s
+          );
       :}
     | SimpleExpr:s
       {:
@@ -403,27 +492,27 @@ NotExpr ::=
 SimpleExpr ::=
       SimpleExpr:s EQ AddExpr:a
       {:
-          RESULT = new AstNode("EQUAL", s, a);
+          RESULT = new AstNode("EQUAL", linha(s), s, a);
       :}
     | SimpleExpr:s NE AddExpr:a
       {:
-          RESULT = new AstNode("NOT_EQUAL", s, a);
+          RESULT = new AstNode("NOT_EQUAL", linha(s), s, a);
       :}
     | SimpleExpr:s LE AddExpr:a
       {:
-          RESULT = new AstNode("LESS_EQUAL", s, a);
+          RESULT = new AstNode("LESS_EQUAL", linha(s), s, a);
       :}
     | SimpleExpr:s LT AddExpr:a
       {:
-          RESULT = new AstNode("LESS_THAN", s, a);
+          RESULT = new AstNode("LESS_THAN", linha(s), s, a);
       :}
     | SimpleExpr:s GE AddExpr:a
       {:
-          RESULT = new AstNode("GREATER_EQUAL", s, a);
+          RESULT = new AstNode("GREATER_EQUAL", linha(s), s, a);
       :}
     | SimpleExpr:s GT AddExpr:a
       {:
-          RESULT = new AstNode("GREATER_THAN", s, a);
+          RESULT = new AstNode("GREATER_THAN", linha(s), s, a);
       :}
     | AddExpr:a
       {:
@@ -437,11 +526,11 @@ SimpleExpr ::=
 AddExpr ::=
       AddExpr:a PLUS MulExpr:m
       {:
-          RESULT = new AstNode("ADDITION", a, m);
+          RESULT = new AstNode("ADDITION", linha(a), a, m);
       :}
     | AddExpr:a MINUS MulExpr:m
       {:
-          RESULT = new AstNode("SUBTRACTION", a, m);
+          RESULT = new AstNode("SUBTRACTION", linha(a), a, m);
       :}
     | MulExpr:m
       {:
@@ -455,11 +544,11 @@ AddExpr ::=
 MulExpr ::=
       MulExpr:m TIMES Factor:f
       {:
-          RESULT = new AstNode("MULTIPLICATION", m, f);
+          RESULT = new AstNode("MULTIPLICATION", linha(m), m, f);
       :}
     | MulExpr:m DIVIDE Factor:f
       {:
-          RESULT = new AstNode("DIVISION", m, f);
+          RESULT = new AstNode("DIVISION", linha(m), m, f);
       :}
     | Factor:f
       {:
@@ -481,11 +570,18 @@ Factor ::=
       :}
     | IDENTIFIER:id LP RP
       {:
-          RESULT = new AstNode("FunctionCall: " + id);
+          RESULT = new AstNode(
+              "FunctionCall: " + id,
+              idleft
+          );
       :}
-    | LP Expr:e RP
+    | LP:inicio Expr:e RP
       {:
-          RESULT = new AstNode("ParenthesizedExpression", e);
+          RESULT = new AstNode(
+              "ParenthesizedExpression",
+              inicioleft,
+              e
+          );
       :}
     ;
 
@@ -495,11 +591,18 @@ Factor ::=
 Variable ::=
       IDENTIFIER:id
       {:
-          RESULT = new AstNode("Variable: " + id);
+          RESULT = new AstNode(
+              "Variable: " + id,
+              idleft
+          );
       :}
     | IDENTIFIER:id LBK Expr:e RBK
       {:
-          RESULT = new AstNode("ArrayAccess: " + id, e);
+          RESULT = new AstNode(
+              "ArrayAccess: " + id,
+              idleft,
+              e
+          );
       :}
     ;
 
@@ -509,7 +612,10 @@ Variable ::=
 StringConstant ::=
     STRING:s
     {:
-        RESULT = new AstNode("String: " + s);
+        RESULT = new AstNode(
+            "String: " + s,
+            sleft
+        );
     :}
     ;
 
@@ -519,11 +625,17 @@ StringConstant ::=
 Constant ::=
       INTCON:n
       {:
-          RESULT = new AstNode("Integer: " + n);
+          RESULT = new AstNode(
+              "Integer: " + n,
+              nleft
+          );
       :}
     | FLOATCON:n
       {:
-          RESULT = new AstNode("Float: " + n);
+          RESULT = new AstNode(
+              "Float: " + n,
+              nleft
+          );
       :}
     ;
 
@@ -537,15 +649,22 @@ Constant ::=
 Statement ::=
     ERROR:e
     {:
-        RESULT = new AstNode("LexicalError: " + e);
+        RESULT = new AstNode(
+            "LexicalError: " + e,
+            eleft
+        );
     :}
     ;
 
 /* Recuperação de erro sintático até o ponto e vírgula */
 
 Statement ::=
-    error SC
+    error SC:fim
     {:
-        RESULT = new AstNode("SyntaxError: comando inválido");
+        RESULT = new AstNode(
+            "SyntaxError: comando inválido",
+            fimleft
+        );
     :}
     ;
+

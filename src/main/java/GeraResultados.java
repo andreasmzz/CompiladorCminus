@@ -96,6 +96,48 @@ public class GeraResultados {
 
                         writer.println("\n--- Árvore Sintática ---");
                         writer.println(arvore);
+                        
+                        // -----------------------------
+                        // ANÁLISE SEMÂNTICA
+                        // -----------------------------
+
+                        writer.println("\n--- Análise Semântica ---");
+
+                        SemanticAnalyzer semantico = new SemanticAnalyzer();
+
+                        // Executa a análise semântica sobre a AST
+                        semantico.analisar(arvore);
+
+                        if (semantico.houveErroSemantico()) {
+
+                            writer.println(
+                                "Código semanticamente inválido."
+                            );
+
+                            writer.println("\nErros semânticos:");
+
+                            for (String erro : semantico.getErros()) {
+                                writer.println("- " + erro);
+                            }
+
+                        } else {
+
+                            writer.println(
+                                "Código semanticamente válido."
+                            );
+                        }
+
+                        // -----------------------------
+                        // TABELA DE SÍMBOLOS
+                        // -----------------------------
+
+                        writer.println("\n--- Tabela de Símbolos ---");
+
+                        for (VariableSymbol simbolo :
+                                semantico.getTabela().getSimbolos()) {
+
+                            writer.println(simbolo);
+                        }
 
                     } else {
 
@@ -121,40 +163,10 @@ public class GeraResultados {
             System.out.println(
                 "Arquivo processado: " + inputFile.getName()
             );
+            
         }
-
-
-//        for (File inputFile : files) {
-//            // abre arquivo de entrada
-//            FileReader fr = new FileReader(inputFile);
-//            Scanner scanner = new Scanner(fr);
-//
-//            // cria arquivo de saída com o mesmo nome
-//            File outputFile = new File(outputDir, inputFile.getName());
-//            PrintWriter writer = new PrintWriter(new FileWriter(outputFile));
-//
-//            // escreve o conteúdo original do arquivo
-//            BufferedReader br = new BufferedReader(new FileReader(inputFile));
-//            String line;
-//            while ((line = br.readLine()) != null) {
-//                writer.println(line);
-//            }
-//            writer.println("\n--- Tokens ---");
-//            try{
-//                // análise léxica
-//                Symbol s = scanner.next_token();
-//                while (s.sym != Tokens.EOF) {   // verifique se sym.EOF está correto
-//                    writer.printf("<%d, %s, linha: %d>%n", s.sym, s.value, s.left);
-//                    s = scanner.next_token();
-//                }
-//            }catch(Exception e){
-//                writer.println(e.getMessage());
-//            }
-//            br.close();
-//            writer.close();
-//            fr.close();
-//
-//            System.out.println("Arquivo processado: " + inputFile.getName());
-//        }
+        
+        
+        
     }
 }

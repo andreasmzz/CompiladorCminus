@@ -94,3 +94,9 @@ Código sintaticamente válido.
                     └── Return
                         └── Integer: 0
 
+
+--- Análise Semântica ---
+Código semanticamente válido.
+
+--- Tabela de Símbolos ---
+a | int | Variável | Linha: 2

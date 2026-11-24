@@ -3,6 +3,7 @@ int main() {
     x = 5;
     y = 2;
     z = x + y * 3 - 1;
+    int j;
     return 0;
 }
 
@@ -37,49 +38,17 @@ int main() {
 <21, -, linha: 5>
 <35, 1, linha: 5>
 <26, ;, linha: 5>
-<8, return, linha: 6>
-<35, 0, linha: 6>
+<6, int, linha: 6>
+<34, j, linha: 6>
 <26, ;, linha: 6>
-<28, }, linha: 7>
+<8, return, linha: 7>
+<35, 0, linha: 7>
+<26, ;, linha: 7>
+<28, }, linha: 8>
 
 --- Análise Sintática ---
-Código sintaticamente válido.
-
---- Árvore Sintática ---
-└── Program
-    └── Procedures
-        └── ProcedureDecl
-            ├── ProcedureHead
-            │   ├── FunctionDecl: main
-            │   │   └── Type: int
-            │   └── DeclList
-            │       ├── Type: int
-            │       └── IdentifierList
-            │           ├── IdentifierList
-            │           │   ├── IdentifierList
-            │           │   │   └── VariableDeclaration: x
-            │           │   └── VariableDeclaration: y
-            │           └── VariableDeclaration: z
-            └── ProcedureBody
-                └── StatementList
-                    ├── StatementList
-                    │   ├── StatementList
-                    │   │   ├── StatementList
-                    │   │   │   └── Assignment
-                    │   │   │       ├── Variable: x
-                    │   │   │       └── Integer: 5
-                    │   │   └── Assignment
-                    │   │       ├── Variable: y
-                    │   │       └── Integer: 2
-                    │   └── Assignment
-                    │       ├── Variable: z
-                    │       └── SUBTRACTION
-                    │           ├── ADDITION
-                    │           │   ├── Variable: x
-                    │           │   └── MULTIPLICATION
-                    │           │       ├── Variable: y
-                    │           │       └── Integer: 3
-                    │           └── Integer: 1
-                    └── Return
-                        └── Integer: 0
-
+Erro sintático!
+Token encontrado: int
+Linha: 6
+Coluna: 5
+Código sintaticamente inválido.

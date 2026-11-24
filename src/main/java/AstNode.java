@@ -11,16 +11,40 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AstNode {
-     private String nome;
+
+    /**
+     * @return the linha
+     */
+    public int getLinha() {
+        return linha;
+    }
+
+    /**
+     * @return the nome
+     */
+    public String getNome() {
+        return nome;
+    }
+
+    /**
+     * @return the filhos
+     */
+    public List<AstNode> getFilhos() {
+        return filhos;
+    }
+    private String nome;
     private List<AstNode> filhos;
+    private int linha;
 
     public AstNode(String nome) {
         this.nome = nome;
         this.filhos = new ArrayList<>();
+        this.linha = 0;
     }
 
-    public AstNode(String nome, AstNode... filhos) {
+    public AstNode(String nome, int linha, AstNode... filhos) {
         this(nome);
+        this.linha = linha;
 
         for (AstNode filho : filhos) {
             if (filho != null) {
@@ -31,7 +55,7 @@ public class AstNode {
 
     public void adicionarFilho(AstNode filho) {
         if (filho != null) {
-            filhos.add(filho);
+            getFilhos().add(filho);
         }
     }
 
@@ -49,13 +73,13 @@ public class AstNode {
         sb.append(prefixo);
 
         sb.append(ultimo ? "└── " : "├── ");
-        sb.append(nome);
+        sb.append(getNome());
         sb.append("\n");
 
-        for (int i = 0; i < filhos.size(); i++) {
-            boolean ultimoFilho = (i == filhos.size() - 1);
+        for (int i = 0; i < getFilhos().size(); i++) {
+            boolean ultimoFilho = (i == getFilhos().size() - 1);
 
-            filhos.get(i).imprimir(
+            getFilhos().get(i).imprimir(
                 sb,
                 prefixo + (ultimo ? "    " : "│   "),
                 ultimoFilho
